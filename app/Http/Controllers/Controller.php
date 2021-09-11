@@ -10,4 +10,13 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * Return environment file values, add as needed.
+     */
+    public function getEnvValues(){
+        return [
+            'APP_ENV'=> strtolower(env('APP_ENV', 'DEV')),
+        ];
+    }
 }
