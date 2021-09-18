@@ -20,7 +20,6 @@ class CustomerVerificationController extends Controller
      */
     public function sendPhoneNumber(Request $request){
 
-        // The phone number must be at least 8 digits.
         $request->validate([
             'phoneNumber' => 'required|min:8',
         ]);
@@ -59,7 +58,6 @@ class CustomerVerificationController extends Controller
      */
     public function getPhoneNumber(Request $request){
 
-            // The registrar must have device_imei.
             $request->validate([
                 'device_imei' => 'required',
             ]);
@@ -101,7 +99,6 @@ class CustomerVerificationController extends Controller
      */
     public function updateVerificationStatus(Request $request){
 
-        // The phone number must be at least 8 digits.
         $request->validate([
             'verification_id' => 'required',
             'success' => 'required|boolean'
