@@ -47,4 +47,6 @@ Route::group([
 
 ], function ($router) {
     Route::post('sendphone', [CustomerVerificationController::class, 'sendPhoneNumber']);
+    Route::get('getphone', [CustomerVerificationController::class, 'getPhoneNumber']);
+    Route::post('codesent', [CustomerVerificationController::class, 'codeIsSent']);
 });

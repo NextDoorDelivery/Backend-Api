@@ -13,5 +13,8 @@ class CustomerVerification extends Model
         'phoneNumber',
         'verificationCode',
         'verified',
+        'inprogress',
+        'sent',
+        'sender',
     ];
 }
