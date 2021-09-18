@@ -75,9 +75,13 @@ class CustomerVerificationController extends Controller
 
             // Getting the first record with unverified phone number.
             $result = CustomerVerification::where('LkVerificationStatusId', $unverifiedStatus)->first();
-            $result->RegistrarDevice = $request['device_imei'];
-            $result->LkVerificationStatusId = $inProgressStatus;
-            $result->update();
+            if($result != null){
+                $result->RegistrarDevice = $request['device_imei'];
+                $result->LkVerificationStatusId = $inProgressStatus;
+                $result->update();
+            }else{
+                $result = 'no records';
+            }
 
             return response()->json(['response' => $result], 200);
 
