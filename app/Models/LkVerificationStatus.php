@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CustomerVerification extends Model
+class LkVerificationStatus extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
-        'phoneNumber',
-        'verificationCode',
         'LkVerificationStatusId',
-        'RegistrarDevice',
+        'description',
     ];
 }

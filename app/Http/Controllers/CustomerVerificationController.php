@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CustomerVerification;
+use App\Models\LkVerificationStatus;
 use Exception;
 
 class CustomerVerificationController extends Controller
@@ -11,28 +12,32 @@ class CustomerVerificationController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['sendPhoneNumber', 'getPhoneNumber', 'codeIsSent']]);
+        $this->middleware('auth:api', ['except' => ['sendPhoneNumber', 'getPhoneNumber', 'updateVerificationStatus']]);
     }
 
     /**
      * Writes user's phone number with random verification code into CustomerVerification table.
      */
     public function sendPhoneNumber(Request $request){
-        
+
         // The phone number must be at least 8 digits.
         $request->validate([
             'phoneNumber' => 'required|min:8',
         ]);
-        
+
         try {
             // Generating random 6 digit number to save as verification code for the given phone number.
             $verificationCode = random_int(100000, 999999);
 
+            // Getting the 'unverified' status id from the look up table.
+            $unverifiedStatus = LkVerificationStatus::where('description', 'unverified')
+                                ->first()['LkVerificationStatusId'];
+
             $customerVerification = new CustomerVerification();
             $customerVerification->phoneNumber = $request['phoneNumber'];
             $customerVerification->verificationCode = $verificationCode;
-            $customerVerification->sender = 1;
-            $customerVerification->verified = false;
+            $customerVerification->LkVerificationStatusId = $unverifiedStatus;
+            $customerVerification->RegistrarDevice = NULL;
             $customerVerification->save();
 
             return response()->json(['response' => 'success'], 200);
@@ -49,16 +54,34 @@ class CustomerVerificationController extends Controller
         }
     }
 
-    public function getPhoneNumber(){
+    /**
+     * Gets the next unverified phone number from the DB.
+     */
+    public function getPhoneNumber(Request $request){
 
-    
+            // The registrar must have device_imei.
+            $request->validate([
+                'device_imei' => 'required',
+            ]);
 
         try {
-            // Generating random 6 digit number to save as verification code for the given phone number.
 
-            $sms = CustomerVerification::where('sent', 0)->first();
+            // Getting the 'unverified' status id from the look up table.
+            $unverifiedStatus = LkVerificationStatus::where('description', 'unverified')
+                                ->first()['LkVerificationStatusId'];
 
-            return response()->json(['response' => $sms], 200);
+            // Getting the 'unverified' status id from the look up table.
+            $inProgressStatus = LkVerificationStatus::where('description', 'in-progress')
+                                ->first()['LkVerificationStatusId'];
+
+
+            // Getting the first record with unverified phone number.
+            $result = CustomerVerification::where('LkVerificationStatusId', $unverifiedStatus)->first();
+            $result->RegistrarDevice = $request['device_imei'];
+            $result->LkVerificationStatusId = $inProgressStatus;
+            $result->update();
+
+            return response()->json(['response' => $result], 200);
 
         } catch (exception $e) {
 
@@ -72,17 +95,28 @@ class CustomerVerificationController extends Controller
         }
     }
 
-    public function codeIsSent(Request $request){
+
+    /**
+     * Updates the status of the in-progress phone record.
+     */
+    public function updateVerificationStatus(Request $request){
 
         // The phone number must be at least 8 digits.
         $request->validate([
-            'phoneNumber' => 'required|min:8',
+            'verification_id' => 'required',
+            'success' => 'required|boolean'
         ]);
 
         try {
-            // Generating random 6 digit number to save as verification code for the given phone number.
-            
-            CustomerVerification::where('phoneNumber', $request['phoneNumber'])->update(['sent' => 1]);
+
+            // Getting the 'verified' status id from the look up table.
+            $verificationStatus = null;
+            $request['success']
+            ? $verificationStatus = LkVerificationStatus::where('description', 'success')->first()['LkVerificationStatusId']
+            : $verificationStatus = LkVerificationStatus::where('description', 'error')->first()['LkVerificationStatusId'];
+
+            CustomerVerification::where('id', $request['verification_id'])
+            ->update(['LkVerificationStatusId' => $verificationStatus]);
 
             return response()->json(['response' => 'success'], 200);
 

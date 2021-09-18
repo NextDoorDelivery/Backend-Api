@@ -26,6 +26,9 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
+        //Uncomment to get bcrypted password.
+        //echo(bcrypt($credentials['password']));
+
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

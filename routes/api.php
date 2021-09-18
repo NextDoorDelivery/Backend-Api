@@ -46,7 +46,7 @@ Route::group([
     'prefix' => 'customer'
 
 ], function ($router) {
-    Route::post('sendphone', [CustomerVerificationController::class, 'sendPhoneNumber']);
-    Route::get('getphone', [CustomerVerificationController::class, 'getPhoneNumber']);
-    Route::post('codesent', [CustomerVerificationController::class, 'codeIsSent']);
+    Route::post('phonenumber', [CustomerVerificationController::class, 'sendPhoneNumber']);
+    Route::get('phonenumber', [CustomerVerificationController::class, 'getPhoneNumber']);
+    Route::patch('phonenumber', [CustomerVerificationController::class, 'updateVerificationStatus']);
 });

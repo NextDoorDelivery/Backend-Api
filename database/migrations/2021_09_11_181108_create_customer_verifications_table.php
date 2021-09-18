@@ -15,9 +15,15 @@ class CreateCustomerVerificationsTable extends Migration
     {
         Schema::create('customer_verifications', function (Blueprint $table) {
             $table->id();
-            $table->string('phoneNumber');
-            $table->integer('verificationCode');
-            $table->boolean('verified')->default(false);
+            $table->string('PhoneNumber', 20);
+            $table->integer('VerificationCode');
+            // Foreign key to 'lk_verification_statuses' table.
+            $table->integer('LkVerificationStatusId')->unsigned();
+            $table->foreign('LkVerificationStatusId')
+                  ->references('LkVerificationStatusId')
+                  ->on('lk_verification_statuses');
+            // Foreign key end.
+            $table->string('RegistrarDevice', 50)->nullable();
             $table->timestamps();
         });
     }
