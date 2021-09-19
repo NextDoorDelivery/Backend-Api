@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This controller handles only admin and registrar device authentication, that uses email and password validation.
+ */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;

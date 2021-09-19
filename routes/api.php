@@ -8,8 +8,8 @@ use App\Http\Controllers\VerificationStatusController;
 
 /**
  * Middleware list:
- * auth:api -> guards the route using email/password validation.
- * mobileAuth -> guards the route using token/deviceUUID validation.
+ * auth:api -> guards the route using email and password validation for admin and registrar device only.
+ * mobileAuth -> guards the route using mobile_token and device_uuid validation for customer mobile devices.
  */
 
 
