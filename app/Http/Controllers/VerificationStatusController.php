@@ -10,11 +10,6 @@ use Exception;
 class VerificationStatusController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['']]);
-    }
-
         /**
          * Gets the next unverified phone number from the DB.
          */
@@ -42,7 +37,7 @@ class VerificationStatusController extends Controller
                 $result->LkVerificationStatusId = $inProgressStatus;
                 $result->update();
             }else{
-                $result = 'no records';
+                return response()->json(['response' => 'no record'], 404);
             }
 
             return response()->json(['response' => $result], 200);

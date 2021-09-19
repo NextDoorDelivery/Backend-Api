@@ -6,16 +6,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerVerificationController;
 use App\Http\Controllers\VerificationStatusController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+/**
+ * Middleware list:
+ * auth:api -> guards the route using email/password validation.
+ * mobileAuth -> guards the route using token/deviceUUID validation.
+ */
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -47,7 +43,10 @@ Route::group([
     'prefix' => 'customer'
 
 ], function ($router) {
+    // Unprotected route.
     Route::post('phonenumber', [CustomerVerificationController::class, 'sendPhoneNumber']);
-    Route::get('phonenumber', [VerificationStatusController::class, 'getPhoneNumber']);
-    Route::patch('phonenumber', [VerificationStatusController::class, 'updateVerificationStatus']);
+    // Unprotected route.
+    Route::post('verifycode', [CustomerVerificationController::class, 'verifyCode']);
+    Route::get('phonenumber', [VerificationStatusController::class, 'getPhoneNumber'])->middleware('auth:api');
+    Route::patch('phonenumber', [VerificationStatusController::class, 'updateVerificationStatus'])->middleware('auth:api');
 });

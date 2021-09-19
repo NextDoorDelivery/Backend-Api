@@ -23,6 +23,7 @@ class CreateCustomerVerificationsTable extends Migration
                   ->references('LkVerificationStatusId')
                   ->on('lk_verification_statuses');
             // Foreign key end.
+            $table->string('DeviceUuid')->nullable();
             $table->string('RegistrarDevice', 50)->nullable();
             $table->timestamps();
         });
