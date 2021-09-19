@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerVerificationController;
+use App\Http\Controllers\VerificationStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,7 @@ Route::group([
 });
 
 /**
- * This class handles customer registration.
+ * This group handles customer phone registration and verification.
  */
 Route::group([
 
@@ -47,6 +48,6 @@ Route::group([
 
 ], function ($router) {
     Route::post('phonenumber', [CustomerVerificationController::class, 'sendPhoneNumber']);
-    Route::get('phonenumber', [CustomerVerificationController::class, 'getPhoneNumber']);
-    Route::patch('phonenumber', [CustomerVerificationController::class, 'updateVerificationStatus']);
+    Route::get('phonenumber', [VerificationStatusController::class, 'getPhoneNumber']);
+    Route::patch('phonenumber', [VerificationStatusController::class, 'updateVerificationStatus']);
 });

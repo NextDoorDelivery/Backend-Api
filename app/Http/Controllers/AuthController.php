@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+
 
 class AuthController extends Controller
 {
@@ -22,15 +25,19 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
+
     {
         $credentials = request(['email', 'password']);
 
-        //Uncomment to get bcrypted password.
-        //echo(bcrypt($credentials['password']));
-
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        if($request['device_imei']){
+            $result = User::where('email', $request['email'])->first();
+            $result->registrarDeviceImei = $request['device_imei'];
+            $result->update();
         }
 
         return $this->respondWithToken($token);
