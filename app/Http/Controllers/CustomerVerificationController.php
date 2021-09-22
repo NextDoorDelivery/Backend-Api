@@ -19,7 +19,7 @@ class CustomerVerificationController extends Controller
     public function sendPhoneNumber(Request $request){
 
         $request->validate([
-            'phoneNumber' => 'required|min:8',
+            'phoneNumber' => 'required|string|min:8',
         ]);
 
         try {
@@ -64,9 +64,9 @@ class CustomerVerificationController extends Controller
     public function verifyCode(Request $request){
 
         $request->validate([
-            'phoneNumber' => 'required|min:8',
-            'verification_code' => 'required|min:6|max:6',
-            'device_uuid' => 'required'
+            'phoneNumber' => 'required|string|min:8',
+            'verification_code' => 'required|string|min:6|max:6',
+            'device_uuid' => 'required|string'
         ]);
 
         try {

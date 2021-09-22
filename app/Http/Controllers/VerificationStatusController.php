@@ -16,7 +16,7 @@ class VerificationStatusController extends Controller
         public function getPhoneNumber(Request $request){
 
             $request->validate([
-                'device_imei' => 'required',
+                'device_imei' => 'required|string',
             ]);
 
         try {
@@ -61,7 +61,7 @@ class VerificationStatusController extends Controller
     public function updateVerificationStatus(Request $request){
 
         $request->validate([
-            'id' => 'required',
+            'id' => 'required|numeric',
             'success' => 'required|boolean'
         ]);
 
