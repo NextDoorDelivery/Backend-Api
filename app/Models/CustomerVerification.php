@@ -10,8 +10,8 @@ class CustomerVerification extends Model
     use HasFactory;
 
     protected $fillable = [
-        'phoneNumber',
-        'verificationCode',
+        'PhoneNumber',
+        'VerificationCode',
         'LkVerificationStatusId',
         'RegistrarDevice',
     ];
