@@ -22,6 +22,8 @@ class CustomerVerificationController extends Controller
             'phoneNumber' => 'required|min:8',
         ]);
 
+        echo($request['phoneNumber']);
+
         try {
             // Generating random 6 digit number to save as verification code for the given phone number.
             $verificationCode = random_int(100000, 999999);
@@ -44,7 +46,7 @@ class CustomerVerificationController extends Controller
             $customerVerification->RegistrarDevice = NULL;
             $customerVerification->save();
 
-            return response()->json(['response' => 'success'], 200);
+            return response()->json(['response' => $customerVerification['phoneNumber']], 200);
 
         } catch (exception $e) {
 

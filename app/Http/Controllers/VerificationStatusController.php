@@ -61,7 +61,7 @@ class VerificationStatusController extends Controller
     public function updateVerificationStatus(Request $request){
 
         $request->validate([
-            'verification_id' => 'required',
+            'id' => 'required',
             'success' => 'required|boolean'
         ]);
 
@@ -73,7 +73,7 @@ class VerificationStatusController extends Controller
             ? $verificationStatus = LkVerificationStatus::where('description', 'success')->first()['LkVerificationStatusId']
             : $verificationStatus = LkVerificationStatus::where('description', 'error')->first()['LkVerificationStatusId'];
 
-            CustomerVerification::where('id', $request['verification_id'])
+            CustomerVerification::where('id', $request['id'])
             ->update(['LkVerificationStatusId' => $verificationStatus]);
 
             return response()->json(['response' => 'success'], 200);
