@@ -30,12 +30,17 @@ class CustomerVerificationController extends Controller
             $unverifiedStatus = LkVerificationStatus::where('description', 'unverified')
                                 ->first()['LkVerificationStatusId'];
 
+                                // Getting the 'error' status id from the look up table.
+            $errorStatus = LkVerificationStatus::where('description', 'error')
+                                ->first()['LkVerificationStatusId'];
+
             /**
              * Deletes any existing unverified records with the same phone number.
              * There must be only 1 unverified record per phone number at a time.
             */
             CustomerVerification::where('PhoneNumber', $request['phoneNumber'])
-                                ->where('LkVerificationStatusId', $unverifiedStatus)->delete();
+                                ->where('LkVerificationStatusId', '!=', $errorStatus)
+                                ->delete();
 
             $customerVerification = new CustomerVerification();
             $customerVerification->PhoneNumber = $request['phoneNumber'];
