@@ -22,6 +22,9 @@ class CustomerVerificationController extends Controller
             'phoneNumber' => 'required|string|min:8',
         ]);
 
+        $request['phoneNumber'] = preg_replace( '/[^0-9]/', '', $request['phoneNumber']);
+
+
         try {
             // Generating random 6 digit number to save as verification code for the given phone number.
             $verificationCode = random_int(100000, 999999);
@@ -111,7 +114,9 @@ class CustomerVerificationController extends Controller
 
                 $response = [
                     'response' => 'success',
-                    'auth_token' => $auth_token
+                    'auth_token' => $auth_token,
+                    //TO-DO: replace 'new' to actual logic to check if phone number exists in user table.
+                    'account_status' => 'new'
                 ];
 
                 return response()->json([$response], 200);

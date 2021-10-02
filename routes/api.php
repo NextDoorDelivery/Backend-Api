@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerVerificationController;
 use App\Http\Controllers\VerificationStatusController;
+use App\Http\Controllers\CustomerProfileController;
 
 /**
  * Middleware list:
@@ -35,7 +36,7 @@ Route::group([
 });
 
 /**
- * This group handles customer phone registration and verification.
+ * This group handles customer registration and verification.
  */
 Route::group([
 
@@ -49,4 +50,8 @@ Route::group([
     Route::post('verifycode', [CustomerVerificationController::class, 'verifyCode']);
     Route::get('phonenumber', [VerificationStatusController::class, 'getPhoneNumber'])->middleware('auth:api');
     Route::patch('phonenumber', [VerificationStatusController::class, 'updateVerificationStatus'])->middleware('auth:api');
+
+    // Customer profile.
+    Route::post('profile', [CustomerProfileController::class, 'createCustomer'])->middleware('mobileAuth');
 });
+
