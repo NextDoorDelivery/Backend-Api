@@ -24,12 +24,10 @@ class MobileAuthentication
     {
 
         $request->validate([
-            'mobile_token' => 'required',
-            'device_uuid' => 'required',
+            'mobile_token' => 'required'
         ]);
 
-        $result = LkMobileDeviceToken::where('DeviceUuid', $request['device_uuid'])
-                  ->where('MobileAuthToken', $request['mobile_token'])->first();
+        $result = LkMobileDeviceToken::where('MobileAuthToken', $request['mobile_token'])->first();
 
         if($result == null){
             return response()->json(['error' => 'Unauthorized'], 401);
